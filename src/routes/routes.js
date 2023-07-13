@@ -1,25 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-// layouts
-import {
-  AddBooking,
-  AddSportCenterPage,
-  AddSportFieldPage,
-  AdminDashboardPage,
-  AdminSportPage,
-  AllSportPage,
-  BookingCalendarPage,
-  BookingPage,
-  DashboardAppPage,
-  ListAccountPage,
-  LoginPage,
-  Page404,
-  PaymentPage,
-  ProfilePage,
-  RegisterPage,
-  SportCenterDetailPage,
-  SportCenterPage,
-  SportPage,
-} from 'src/pages';
+import { DashboardAppPage, ListAccountPage, LoginPage, Page404, ProfilePage, RegisterPage, SportPage } from 'src/pages';
 import DashboardLayout from '../layouts/dashboard';
 import SimpleLayout from '../layouts/simple';
 import PrivateRoute from './PrivateRoute';
@@ -40,7 +20,7 @@ export const publicRoute = [
   },
 ];
 
-export const ownerRoute = [
+export const adminRoute = [
   {
     path: 'app',
     component: <DashboardAppPage />,
@@ -50,59 +30,12 @@ export const ownerRoute = [
     component: <SportPage />,
   },
   {
-    path: 'all-sport-system',
-    component: <AllSportPage />,
-  },
-  {
-    path: 'sport-center',
-    component: <SportCenterPage />,
-  },
-  {
-    path: 'add-sport-center',
-    component: <AddSportCenterPage />,
-  },
-  {
-    path: 'sport-center-detail/:id',
-    component: <SportCenterDetailPage />,
-  },
-  {
-    path: 'add-sport-field/:id',
-    component: <AddSportFieldPage />,
-  },
-  {
-    path: 'booking',
-    component: <BookingPage />,
-  },
-  {
-    path: 'add-booking',
-    component: <AddBooking />,
-  },
-  {
-    path: 'booking-calendar',
-    component: <BookingCalendarPage />,
-  },
-  {
-    path: 'payment',
-    component: <PaymentPage />,
-  },
-  {
-    path: 'profile',
-    component: <ProfilePage />,
-  },
-];
-
-export const adminRoute = [
-  {
-    path: 'app',
-    component: <AdminDashboardPage />,
-  },
-  {
     path: 'list-account',
     component: <ListAccountPage />,
   },
   {
-    path: 'list-sport-systems',
-    component: <AdminSportPage />,
+    path: 'profile',
+    component: <ProfilePage />,
   },
 ];
 
@@ -127,7 +60,7 @@ function Router() {
       <Route path="/" element={<PrivateRoute />}>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route element={<Navigate to="/dashboard/app" />} index={true} />
-          {ownerRoute.map((route) => (
+          {adminRoute.map((route) => (
             <Route key={route.path} path={route.path} element={route.component} />
           ))}
         </Route>

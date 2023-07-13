@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { LoginOwner } from 'src/services/auth/authSlice';
+import { LoginAdmin } from 'src/services/auth/authSlice';
 import * as Yup from 'yup';
 
 export default function LoginForm() {
@@ -25,7 +25,7 @@ export default function LoginForm() {
         navigate,
         user: formik.values,
       };
-      dispatch(LoginOwner(params));
+      dispatch(LoginAdmin(params));
       formikHelpers.resetForm();
     },
     validationSchema: Yup.object({

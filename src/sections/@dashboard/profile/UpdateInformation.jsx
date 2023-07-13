@@ -43,7 +43,6 @@ function UpdateInformation({ isOpen, toogleOpen }) {
 
   const [image, setImage] = useState(isEditing && user.image);
   const [stringImg, setStringImg] = useState([]);
-  const [stringImgFB, setStringImgFB] = useState();
 
   const onImageChange = (event) => {
     let storageImage = [];
@@ -70,7 +69,6 @@ function UpdateInformation({ isOpen, toogleOpen }) {
           console.log('error: ', error);
         });
     }
-    setStringImgFB(imagesLink[0]);
     console.log('imgLink: ', imagesLink[0]);
   };
 
@@ -93,7 +91,7 @@ function UpdateInformation({ isOpen, toogleOpen }) {
         phone: `0${formik.values.phone}`,
         gender: gender,
         YOB: yob,
-        image: stringImgFB ? stringImgFB : imagesLink[0],
+        image: imagesLink[0] || user.iamge,
       };
       const params = {
         updateOwner,

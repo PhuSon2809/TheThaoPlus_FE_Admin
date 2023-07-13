@@ -1,8 +1,7 @@
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import MapIcon from '@mui/icons-material/Map';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
+  Avatar,
   Button,
   Card,
   Container,
@@ -28,35 +27,25 @@ import { filter } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import TableSportCenterSkeleton from 'src/components/skeleton/TableSportCenterSkeleton';
+
+import TableAccountSkeleton from 'src/components/skeleton/TableAccountSkeleton';
 import { useModal } from 'src/hooks/useModal';
-import SportCenterMapView from 'src/sections/@dashboard/sportCenter/SportCenterMapView';
-import {
-  activeSportCenter,
-  deactiveSportCenter,
-  deleteSportCenter,
-  getSportCentersOfOwner,
-} from 'src/services/sportCenter/sportCenterSlice';
-import Iconify from '../../components/iconify';
+import { activeAccount, deactiveAccount, deleteAccount, getAllAccounts } from 'src/services/account/accountSlice';
 import Label from '../../components/label';
 import Scrollbar from '../../components/scrollbar';
 import { TableListHead, UserListToolbar } from '../../sections/@dashboard/table';
-
-// ----------------------------------------------------------------------
+import AccountDetailModal from 'src/sections/@dashboard/account/AccountDetailModal';
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Tên Trung Tâm', alignRight: false },
-  { id: 'address', label: 'Địa Chỉ', alignRight: false },
-  { id: 'openTime', label: 'Giờ Mở Cửa', alignRight: false },
-  { id: 'closeTime', label: 'Giờ Đóng Cửa', alignRight: false },
-  { id: 'sport', label: 'Môn Thể Thao', alignRight: false },
-  { id: 'quantity', label: 'Số Lượng', alignRight: false },
-  { id: 'status', label: 'Trang Thái', alignRight: false },
+  { id: 'name', label: 'Họ & Tên', alignRight: false },
+  { id: 'sdt', label: 'Số điện thoại', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'sportCenter', label: 'Trung tâm', alignRight: false },
+  { id: 'booking', label: 'Booking', alignRight: false },
+  { id: 'role', label: 'Vai trò', alignRight: false },
+  { id: 'status', label: 'Trạng thái', alignRight: false },
   { id: '' },
 ];
-
-// ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -82,23 +71,30 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => {
+      const name = _user.firstname + ' ' + _user.lastname;
+      return name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    });
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-function SportCenterPage() {
+function ListAccountPage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { toogleOpen, isOpen } = useModal();
-  const { toogleOpen: toogleOpenMap, isOpen: isOpenMap } = useModal();
+  const { toogleOpen: toogleOpenDetail, isOpen: isOpenDetail } = useModal();
 
-  const { isLoading, sportCenterOfOwner } = useSelector((state) => state.sportCenter);
+  const { user } = useSelector((state) => state.auth);
+  const { accounts, isLoading } = useSelector((state) => state.account);
+
+  let accountsNotCurrentUser = accounts.filter((account) => account._id !== user._id);
+  console.log(accountsNotCurrentUser);
 
   const [open, setOpen] = useState(null);
 
   const [idToDelete, setIdToDelete] = useState(null);
+  const [idToDetail, setIdToDetail] = useState(null);
 
   const [page, setPage] = useState(0);
 
@@ -111,7 +107,7 @@ function SportCenterPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(getSportCentersOfOwner());
+    dispatch(getAllAccounts());
   }, [dispatch]);
 
   const handleOpenMenu = (event) => {
@@ -142,43 +138,23 @@ function SportCenterPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sportCenterOfOwner.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - accountsNotCurrentUser.length) : 0;
 
-  const filteredUsers = applySortFilter(sportCenterOfOwner, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(accountsNotCurrentUser, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
     <>
       <Helmet>
-        <title> Trung Tâm Thể Thao | TheThaoPlus </title>
+        <title> Người Dùng | TheThaoPlus </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Trung Tâm Thể Thao
+            Danh sách người dùng
           </Typography>
-          <Stack direction="row" alignItems="center" gap={2}>
-            <Button variant="contained" startIcon={<MapIcon />} onClick={toogleOpenMap}>
-              Xem bản đồ
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<AddRoundedIcon />}
-              sx={{
-                backgroundColor: '#00C187',
-                '&:hover': {
-                  backgroundColor: '#30ca9c',
-                },
-              }}
-              onClick={() => {
-                navigate('/dashboard/add-sport-center');
-              }}
-            >
-              Thêm mới
-            </Button>
-          </Stack>
         </Stack>
 
         <Card>
@@ -194,70 +170,91 @@ function SportCenterPage() {
                   onRequestSort={handleRequestSort}
                 />
                 {isLoading ? (
-                  <TableSportCenterSkeleton />
+                  <TableAccountSkeleton />
                 ) : (
                   <TableBody>
                     {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                      const { _id, name, address, closeTime, openTime, sport, sportFields, status } = row;
+                      const {
+                        _id,
+                        firstname,
+                        lastname,
+                        phone,
+                        role,
+                        email,
+                        sportCenters,
+                        bookingforOwner,
+                        bookingforUser,
+                        image,
+                        isBlocked,
+                      } = row;
+
+                      const name = firstname + ' ' + lastname;
 
                       return (
                         <TableRow hover key={_id} tabIndex={-1} role="checkbox">
-                          <TableCell align="center">
+                          <TableCell align="center" width={60}>
                             <Typography variant="subtitle2">{index + 1}</Typography>
                           </TableCell>
 
                           <TableCell
-                            align="left"
+                            component="th"
                             scope="row"
+                            padding="none"
                             onClick={() => {
-                              navigate(`/dashboard/sport-center-detail/${_id}`);
+                              toogleOpenDetail();
+                              setIdToDetail(_id);
                             }}
+                            sx={{ cursor: 'pointer' }}
                           >
-                            <Typography variant="subtitle2" sx={{ width: 150, fontSize: '0.875rem' }} noWrap>
-                              {name}
-                            </Typography>
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Avatar alt={firstname} src={image} sx={{ width: 56, height: 56 }} />
+                              <Typography variant="subtitle2" noWrap sx={{ textTransform: 'capitalize' }}>
+                                {name}
+                              </Typography>
+                            </Stack>
                           </TableCell>
 
+                          <TableCell align="left">{phone}</TableCell>
                           <TableCell align="left">
                             <Typography sx={{ width: 150, fontSize: '0.875rem' }} noWrap>
-                              {address}
+                              {email}
                             </Typography>
                           </TableCell>
-                          <TableCell align="left">{openTime}</TableCell>
-                          <TableCell align="left">{closeTime}</TableCell>
-
+                          <TableCell align="left">{sportCenters.length} trung tâm</TableCell>
+                          <TableCell align="left">
+                            {bookingforOwner.length + bookingforUser.length}{' '}
+                            {bookingforOwner.length + bookingforUser.length > 1 ? 'bookings' : 'booking'}
+                          </TableCell>
                           <TableCell align="left">
                             <Label
                               color={
-                                sport.name === 'bóng đá'
+                                role?.name === 'user'
                                   ? 'success'
-                                  : sport.name === 'bóng rổ'
+                                  : role?.name === 'owner'
                                   ? 'warning'
-                                  : sport.name === 'cầu lông'
+                                  : role?.name === 'admin'
                                   ? 'primary'
                                   : 'error'
                               }
                               sx={{ textTransform: 'capitalize' }}
                             >
-                              {sport.name}
+                              {role?.name}
                             </Label>
                           </TableCell>
 
-                          <TableCell align="left">{sportFields.length} sân</TableCell>
-
-                          <TableCell align="left" width={195}>
+                          <TableCell align="left">
                             <FormControlLabel
                               control={
                                 <Switch
                                   size="small"
                                   color="success"
-                                  checked={status}
-                                  onClick={() => dispatch(status ? deactiveSportCenter(_id) : activeSportCenter(_id))}
+                                  checked={!isBlocked}
+                                  onClick={() => dispatch(!isBlocked ? deactiveAccount(_id) : activeAccount(_id))}
                                 />
                               }
                               label={
-                                <Label color={(status === false && 'error') || 'success'}>
-                                  {status ? 'Hoạt động' : 'Không hoạt động'}
+                                <Label color={(!isBlocked === false && 'error') || 'success'}>
+                                  {!isBlocked ? 'Hoạt động' : 'Không hoạt động'}
                                 </Label>
                               }
                             />
@@ -265,10 +262,9 @@ function SportCenterPage() {
 
                           <TableCell align="right">
                             <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                              <Iconify
-                                icon={'eva:more-vertical-fill'}
+                              <MoreVertIcon
                                 onClick={() => {
-                                  setIdToDelete({ sportCenterId: _id, sportId: sport._id });
+                                  setIdToDelete(_id);
                                 }}
                               />
                             </IconButton>
@@ -287,7 +283,7 @@ function SportCenterPage() {
                 {isNotFound && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={9} sx={{ py: 3 }}>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                         <Paper
                           sx={{
                             textAlign: 'center',
@@ -314,7 +310,7 @@ function SportCenterPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={sportCenterOfOwner.length}
+            count={filteredUsers.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -322,8 +318,6 @@ function SportCenterPage() {
           />
         </Card>
       </Container>
-
-      {isOpenMap && <SportCenterMapView isOpenMap={isOpenMap} toogleOpenMap={toogleOpenMap} />}
 
       <Popover
         open={Boolean(open)}
@@ -343,16 +337,15 @@ function SportCenterPage() {
           },
         }}
       >
-        <MenuItem>
-          <EditRoundedIcon fontSize="small" sx={{ mr: 2 }} />
-          Chỉnh sửa
-        </MenuItem>
-
         <MenuItem sx={{ color: 'error.main' }} onClick={toogleOpen}>
           <DeleteRoundedIcon fontSize="small" sx={{ mr: 2 }} />
           Xóa
         </MenuItem>
       </Popover>
+
+      {isOpenDetail && (
+        <AccountDetailModal isOpenDetail={isOpenDetail} toogleOpenDetail={toogleOpenDetail} idToDetail={idToDetail} />
+      )}
 
       {isOpen && (
         <Dialog
@@ -366,7 +359,7 @@ function SportCenterPage() {
           onClose={toogleOpen}
         >
           <DialogContent sx={{ width: '100%' }}>
-            <Typography variant="subtitle1">Bạn có muốn xóa trung tâm thể thao này không?</Typography>
+            <Typography variant="subtitle1">Bạn có muốn xóa tài khoản này không?</Typography>
           </DialogContent>
           <DialogActions>
             <Button variant="contained" color="secondary" size="small" onClick={toogleOpen}>
@@ -377,8 +370,9 @@ function SportCenterPage() {
               color="error"
               size="small"
               onClick={() => {
-                dispatch(deleteSportCenter(idToDelete));
+                dispatch(deleteAccount(idToDelete));
                 toogleOpen();
+                handleCloseMenu();
               }}
             >
               Xóa
@@ -390,4 +384,4 @@ function SportCenterPage() {
   );
 }
 
-export default SportCenterPage;
+export default ListAccountPage;

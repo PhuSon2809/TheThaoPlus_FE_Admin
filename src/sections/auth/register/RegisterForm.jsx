@@ -20,7 +20,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { RegisterOwner } from 'src/services/auth/authSlice';
+import { RegisterAdmin } from 'src/services/auth/authSlice';
 import * as Yup from 'yup';
 
 function RegisterForm() {
@@ -55,14 +55,14 @@ function RegisterForm() {
         password: formik.values.password,
         gender: gender,
         YOB: moment(yob.$d).format('DD-MM-YYYY'),
-        role: '646f1939cb8a74dfafdf1357',
+        role: '646f1d1ba20878e6b46647ab',
       };
       const params = {
         newOwner,
         navigate,
       };
       console.log(params);
-      dispatch(RegisterOwner(params));
+      dispatch(RegisterAdmin(params));
       formikHelpers.resetForm();
     },
     validationSchema: Yup.object({

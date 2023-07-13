@@ -1,28 +1,52 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addSportListThunk, getAllSportsThunk, getSportOfOwnerThunk } from './sportThunk';
 import { toast } from 'react-toastify';
+import {
+  activeSportThunk,
+  createNewSportThunk,
+  deactiveSportThunk,
+  deleteSportThunk,
+  getAllSportsThunk,
+  getSportDetailThunk,
+  updateSportThunk,
+} from './sportThunk';
 
 const initialState = {
   isLoading: false,
   isError: false,
   isSuccess: false,
+  isEditing: false,
   message: '',
   sports: [],
-  sportsOfOwner: [],
   sport: {},
 };
 
 export const getAllSports = createAsyncThunk('sport/get-all-sports', getAllSportsThunk);
-export const addSportList = createAsyncThunk('sport/add-sport-list', addSportListThunk);
-export const getSportOfOwner = createAsyncThunk('sport/get-sport-of-owner', getSportOfOwnerThunk);
+export const getSportDetail = createAsyncThunk('sport/get-sports-detail', getSportDetailThunk);
+export const creatNewSport = createAsyncThunk('sport/create-sports', createNewSportThunk);
+export const updateSport = createAsyncThunk('sport/update-sports', updateSportThunk);
+export const deleteSport = createAsyncThunk('sport/delete-sports', deleteSportThunk);
+export const activeSport = createAsyncThunk('sport/active-sports', activeSportThunk);
+export const deactiveSport = createAsyncThunk('sport/deactive-sports', deactiveSportThunk);
 
 const sportSlice = createSlice({
   name: 'sport',
   initialState,
   reducers: {
+    setMessageSuccess: (state, action) => {
+      state.message = action.payload;
+      toast.success(state.message);
+    },
     setMessageNoti: (state, action) => {
       state.message = action.payload?.messages;
       toast.info(state.message);
+    },
+    setMessageError: (state, action) => {
+      state.message = action.payload;
+      toast.error(state.message);
+    },
+    setEditSport: (state, action) => {
+      state.isEditing = true;
+      state.sport = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -41,37 +65,90 @@ const sportSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
       })
-      .addCase(getSportOfOwner.pending, (state) => {
+      .addCase(getSportDetail.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getSportOfOwner.fulfilled, (state, action) => {
+      .addCase(getSportDetail.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.sportsOfOwner = [...action.payload?.ownerSportList];
+        state.sport = { ...action.payload?.getSport };
       })
-      .addCase(getSportOfOwner.rejected, (state) => {
+      .addCase(getSportDetail.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
       })
-      .addCase(addSportList.pending, (state) => {
+      .addCase(creatNewSport.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(addSportList.fulfilled, (state, action) => {
-        console.log(action.payload);
+      .addCase(creatNewSport.fulfilled, (state) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
       })
-      .addCase(addSportList.rejected, (state) => {
+      .addCase(creatNewSport.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        toast.error('Add faild!');
+      })
+      .addCase(updateSport.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateSport.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(updateSport.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+      })
+      .addCase(deleteSport.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteSport.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.sport = { ...action.payload?.getSport };
+      })
+      .addCase(deleteSport.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        toast.error(action.payload?.data.message);
+      })
+      .addCase(activeSport.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(activeSport.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(activeSport.rejected, (state) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+      })
+      .addCase(deactiveSport.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deactiveSport.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(deactiveSport.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        toast.error(action.payload?.data.message);
       });
   },
 });
 
-export const { setMessageNoti } = sportSlice.actions;
+export const { setMessageSuccess, setMessageNoti, setMessageError, setEditSport } = sportSlice.actions;
 export default sportSlice.reducer;

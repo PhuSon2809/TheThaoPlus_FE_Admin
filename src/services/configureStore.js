@@ -4,6 +4,7 @@ import sportReducer from './sport/sportSlice';
 import sportCenterReducer from './sportCenter/sportCenterSlice';
 import sportFieldReducer from './sportField/sportFieldSlice';
 import bookingReducer from './booking/bookingSlice';
+import accountReducer from './account/accountSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     sportCenter: sportCenterReducer,
     sportField: sportFieldReducer,
     booking: bookingReducer,
+    account: accountReducer,
   },
 });

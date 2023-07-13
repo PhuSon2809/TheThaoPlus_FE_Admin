@@ -1,15 +1,16 @@
-import { Avatar, Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
-import { Helmet } from 'react-helmet-async';
-import { useDispatch, useSelector } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import EmailIcon from '@mui/icons-material/Email';
 import LocalPhoneRoundedIcon from '@mui/icons-material/LocalPhoneRounded';
+import { Avatar, Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
+import moment from 'moment';
+import { Helmet } from 'react-helmet-async';
+import { useDispatch, useSelector } from 'react-redux';
+
+import ProfileSkeleton from 'src/components/skeleton/ProfileSkeleton';
 import { useModal } from 'src/hooks/useModal';
 import UpdateInformation from 'src/sections/@dashboard/profile/UpdateInformation';
 import UpdatePassword from 'src/sections/@dashboard/profile/UpdatePassword';
 import { setEditUser } from 'src/services/auth/authSlice';
-import moment from 'moment';
-import ProfileSkeleton from 'src/components/skeleton/ProfileSkeleton';
 
 function ProfilePage(props) {
   const dispatch = useDispatch();

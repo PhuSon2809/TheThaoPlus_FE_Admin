@@ -14,14 +14,13 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { LoginOwner } from 'src/services/auth/authSlice';
+// import { useDispatch } from 'react-redux';
+// import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 function UpdatePassword({ isOpenPassword, toogleOpenPassword }) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
 
   const [showPassold, setShowPassold] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -34,11 +33,11 @@ function UpdatePassword({ isOpenPassword, toogleOpenPassword }) {
       confirmPassword: '',
     },
     onSubmit: (values, formikHelpers) => {
-      const params = {
-        navigate,
-        user: formik.values,
-      };
-      dispatch(LoginOwner(params));
+      // const params = {
+      //   navigate,
+      //   user: formik.values,
+      // };
+      // dispatch(LoginOwner(params));
       toogleOpenPassword();
       formikHelpers.resetForm();
     },

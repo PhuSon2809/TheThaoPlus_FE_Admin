@@ -1,9 +1,9 @@
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import { IconButton, InputAdornment, OutlinedInput, Toolbar, Tooltip, Typography } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-// @mui
-import { styled, alpha } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
-// component
-import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -32,13 +32,13 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-BookingListToolbar.propTypes = {
+UserListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };
 
-export default function BookingListToolbar({ numSelected, filterName, onFilterName }) {
+export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <StyledRoot
       sx={{
@@ -50,16 +50,16 @@ export default function BookingListToolbar({ numSelected, filterName, onFilterNa
     >
       {numSelected > 0 ? (
         <Typography component="div" variant="subtitle1">
-          {numSelected} selected
+          Đã chọn {numSelected}
         </Typography>
       ) : (
         <StyledSearch
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Tìm kiếm"
           startAdornment={
             <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+              <SearchRoundedIcon sx={{ color: 'text.disabled', width: 20, height: 20 }} />
             </InputAdornment>
           }
         />
@@ -68,13 +68,13 @@ export default function BookingListToolbar({ numSelected, filterName, onFilterNa
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
+            <DeleteRoundedIcon fontSize="small" />
           </IconButton>
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
-            <Iconify icon="ic:round-filter-list" />
+            <FilterListRoundedIcon fontSize="small" />
           </IconButton>
         </Tooltip>
       )}

@@ -1,14 +1,8 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import {
-  Avatar,
   Button,
   Card,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  IconButton,
   Paper,
   Stack,
   Table,
@@ -23,14 +17,14 @@ import { filter } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+
 import TableSportSkeleton from 'src/components/skeleton/TableSportSkeleton';
 import { useModal } from 'src/hooks/useModal';
-import { SportListToolbar } from 'src/sections/@dashboard/sport';
-import { addSportList, getSportOfOwner } from 'src/services/sport/sportSlice';
-import Label from '../../components/label';
+import { SportListToolbar, SportTableRow } from 'src/sections/@dashboard/sport';
+import { getAllSports } from 'src/services/sport/sportSlice';
 import Scrollbar from '../../components/scrollbar';
 import { TableListHead } from '../../sections/@dashboard/table';
+import AddSportModal from 'src/sections/@dashboard/sport/AddSportModal';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Tên môn thể thao', alignRight: false },
@@ -72,13 +66,10 @@ function applySortFilter(array, comparator, query) {
 
 function SportPage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const { toogleOpen, isOpen } = useModal();
+  const { toogleOpen: toogleOpenAdd, isOpen: isOpenAdd } = useModal();
 
-  const { sportsOfOwner, isLoading } = useSelector((state) => state.sport);
-
-  const [sportId, setSportId] = useState();
+  const { sports, isLoading } = useSelector((state) => state.sport);
 
   const [page, setPage] = useState(0);
 
@@ -91,7 +82,7 @@ function SportPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    dispatch(getSportOfOwner());
+    dispatch(getAllSports());
   }, [dispatch]);
 
   const handleRequestSort = (event, property) => {
@@ -114,13 +105,11 @@ function SportPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sportsOfOwner.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sports.length) : 0;
 
-  const filteredUsers = applySortFilter(sportsOfOwner, getComparator(order, orderBy), filterName);
+  const filteredSports = applySortFilter(sports, getComparator(order, orderBy), filterName);
 
-  const isNotFound = !filteredUsers.length && !!filterName;
-  const lenght = sportsOfOwner.length <= 5 ? sportsOfOwner.length : 5;
-  console.log(lenght);
+  const isNotFound = !filteredSports.length && !!filterName;
 
   return (
     <>
@@ -142,9 +131,7 @@ function SportPage() {
                 backgroundColor: '#30ca9c',
               },
             }}
-            onClick={() => {
-              navigate('/dashboard/all-sport-system');
-            }}
+            onClick={toogleOpenAdd}
           >
             Thêm mới
           </Button>
@@ -166,45 +153,63 @@ function SportPage() {
                   <TableSportSkeleton />
                 ) : (
                   <TableBody>
-                    {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                      const { _id, name, image, sportCenters, status } = row;
+                    {filteredSports.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                      const { _id } = row;
 
                       return (
-                        <TableRow hover key={_id} tabIndex={-1} role="checkbox">
-                          <TableCell align="center" width={60}>
-                            <Typography variant="subtitle2">{index + 1}</Typography>
-                          </TableCell>
+                        <SportTableRow key={_id} sportRow={row} index={index} />
+                        // <TableRow hover key={_id} tabIndex={-1} role="checkbox">
+                        //   <TableCell align="center" width={60}>
+                        //     <Typography variant="subtitle2">{index + 1}</Typography>
+                        //   </TableCell>
 
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={image} sx={{ width: 56, height: 56 }} />
-                              <Typography variant="subtitle2" noWrap sx={{ textTransform: 'capitalize' }}>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
+                        //   <TableCell component="th" scope="row" padding="none">
+                        //     <Stack direction="row" alignItems="center" spacing={2}>
+                        //       <Avatar alt={name} src={image} sx={{ width: 56, height: 56 }} />
+                        //       <Typography variant="subtitle2" noWrap sx={{ textTransform: 'capitalize' }}>
+                        //         {name}
+                        //       </Typography>
+                        //     </Stack>
+                        //   </TableCell>
 
-                          <TableCell align="left">{sportCenters.length} trung tâm thể thao</TableCell>
+                        //   <TableCell align="left">{sportCenters.length} trung tâm thể thao</TableCell>
 
-                          <TableCell align="left">
-                            <Label color={(!status && 'error') || 'success'}>
-                              {status ? 'Hoạt động' : 'Không hoạt động'}
-                            </Label>
-                          </TableCell>
+                        //   <TableCell align="left">
+                        //     <FormControlLabel
+                        //       control={
+                        //         <Switch
+                        //           size="small"
+                        //           color="success"
+                        //           checked={status}
+                        //           onClick={() => dispatch(status ? deactiveSport(_id) : activeSport(_id))}
+                        //         />
+                        //       }
+                        //       label={
+                        //         <Label color={(status === false && 'error') || 'success'}>
+                        //           {status ? 'Hoạt động' : 'Không hoạt động'}
+                        //         </Label>
+                        //       }
+                        //     />
+                        //   </TableCell>
 
-                          <TableCell align="right">
-                            <IconButton
-                              size="large"
-                              color="error"
-                              onClick={() => {
-                                toogleOpen();
-                                setSportId(_id);
-                              }}
-                            >
-                              <RemoveCircleRoundedIcon />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
+                        //   <TableCell align="right">
+                        //     <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                        //       <MoreVertIcon
+                        //         onClick={() => {
+                        //           setSportId(_id);
+                        //         }}
+                        //       />
+                        //     </IconButton>
+                        //   </TableCell>
+                        //   {isOpenAdd && (
+                        //     <AddSportModal
+                        //       isOpenAdd={isOpenAdd}
+                        //       toogleOpenAdd={toogleOpenAdd}
+                        //       sport={row}
+                        //       sportId={sportId}
+                        //     />
+                        //   )}
+                        // </TableRow>
                       );
                     })}
                     {emptyRows > 0 && (
@@ -245,7 +250,7 @@ function SportPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={sportsOfOwner.length}
+            count={filteredSports.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -254,38 +259,7 @@ function SportPage() {
         </Card>
       </Container>
 
-      {isOpen && (
-        <Dialog
-          sx={{
-            '.css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-              width: '300px',
-              maxWidth: '300px',
-            },
-          }}
-          open={isOpen}
-          onClose={toogleOpen}
-        >
-          <DialogContent sx={{ width: '100%' }}>
-            <Typography variant="subtitle1">Bạn có muốn xóa môn thể thao này không?</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button variant="contained" color="secondary" size="small" onClick={toogleOpen}>
-              Đóng
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              size="small"
-              onClick={() => {
-                dispatch(addSportList(sportId));
-                toogleOpen();
-              }}
-            >
-              Xóa
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
+      {isOpenAdd && <AddSportModal isOpenAdd={isOpenAdd} toogleOpenAdd={toogleOpenAdd} />}
     </>
   );
 }

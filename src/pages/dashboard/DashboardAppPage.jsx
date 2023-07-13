@@ -1,21 +1,19 @@
-import { Helmet } from 'react-helmet-async';
-// @mui
-import { Container, Grid, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-// components
-import Iconify from '../../components/iconify';
-// sections
 import AttachMoneyRoundedIcon from '@mui/icons-material/AttachMoneyRounded';
 import BookOnlineRoundedIcon from '@mui/icons-material/BookOnlineRounded';
 import SportsSoccerRoundedIcon from '@mui/icons-material/SportsSoccerRounded';
 import WhereToVoteRoundedIcon from '@mui/icons-material/WhereToVoteRounded';
+import { Container, Grid, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import moment from 'moment';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
+
 import AppWidgetPrice from 'src/sections/@dashboard/app/AppWidgetPrice';
 import { getAllBookings } from 'src/services/booking/bookingSlice';
-import { getSportOfOwner } from 'src/services/sport/sportSlice';
+import { getAllSports } from 'src/services/sport/sportSlice';
 import { getSportCentersOfOwner } from 'src/services/sportCenter/sportCenterSlice';
+import Iconify from '../../components/iconify';
 import {
   AppConversionRates,
   AppCurrentSubject,
@@ -32,12 +30,12 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { sportsOfOwner } = useSelector((state) => state.sport);
+  const { sports } = useSelector((state) => state.sport);
   const { sportCenterOfOwner } = useSelector((state) => state.sportCenter);
   const { bookings } = useSelector((state) => state.booking);
 
   useEffect(() => {
-    dispatch(getSportOfOwner());
+    dispatch(getAllSports());
   }, [dispatch]);
 
   useEffect(() => {
@@ -86,7 +84,7 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Môn Thể Thao"
-              total={sportsOfOwner.length}
+              total={sports.length}
               color="info"
               icon={<SportsSoccerRoundedIcon fontSize="large" />}
             />
@@ -132,7 +130,7 @@ export default function DashboardAppPage() {
               //   { label: 'Europe', value: 1443 },
               //   { label: 'Africa', value: 4443 },
               // ]}
-              chartData={sportsOfOwner.map((sport) => {
+              chartData={sports.map((sport) => {
                 return { label: sport.name, value: Math.random() * (1000 - 500) + 500 };
               })}
               chartColors={[

@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { loginAdminThunk, loginOwnerThunk, logoutThunk, registerOwnerThunk, updateOwnerThunk } from './authThunk';
+import { loginAdminThunk, logoutThunk, registerAdminThunk, updateAdminThunk } from './authThunk';
 
-const getUserfromLocalStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+const getUserfromLocalStorage = localStorage.getItem('userInfoAdmin')
+  ? JSON.parse(localStorage.getItem('userInfoAdmin'))
+  : null;
 
 const initialState = {
   user: getUserfromLocalStorage,
@@ -14,11 +16,10 @@ const initialState = {
   message: '',
 };
 
-export const RegisterOwner = createAsyncThunk('auth/RegisterOwner', registerOwnerThunk);
-export const LoginOwner = createAsyncThunk('auth/LoginOwner', loginOwnerThunk);
+export const RegisterAdmin = createAsyncThunk('auth/RegisterAdmin', registerAdminThunk);
 export const LoginAdmin = createAsyncThunk('auth/LoginAdmin', loginAdminThunk);
 export const logoutAccount = createAsyncThunk('auth/Logout', logoutThunk);
-export const updateAccount = createAsyncThunk('auth/UpdateOwner', updateOwnerThunk);
+export const updateAccount = createAsyncThunk('auth/UpdateAdmin', updateAdminThunk);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -34,38 +35,20 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(RegisterOwner.pending, (state) => {
+      .addCase(RegisterAdmin.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(RegisterOwner.fulfilled, (state, action) => {
+      .addCase(RegisterAdmin.fulfilled, (state, action) => {
         console.log(action.payload);
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
       })
-      .addCase(RegisterOwner.rejected, (state, action) => {
+      .addCase(RegisterAdmin.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         toast.error(action.payload?.data.message);
-      })
-      .addCase(LoginOwner.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(LoginOwner.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.user = action.payload?.user;
-        state.token = action.payload?.token;
-        state.message = 'success';
-      })
-      .addCase(LoginOwner.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.payload;
-        toast.error(action.payload);
       })
       .addCase(LoginAdmin.pending, (state) => {
         state.isLoading = true;

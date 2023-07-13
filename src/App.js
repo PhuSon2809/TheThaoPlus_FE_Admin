@@ -1,15 +1,15 @@
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import { StyledChart } from './components/chart';
 import ScrollToTop from './components/scroll-to-top';
 import Router from './routes/routes';
 import { store } from './services/configureStore';
 import ThemeProvider from './theme';
-import { ToastContainer } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export default function App() {
   return (

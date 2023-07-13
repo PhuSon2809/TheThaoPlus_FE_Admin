@@ -1,5 +1,31 @@
 import axiosClient from 'src/api/axiosClient';
-import { getAllSports, getSportOfOwner, setMessageNoti } from './sportSlice';
+import { getAllSports, setMessageError, setMessageSuccess } from './sportSlice';
+
+export const createNewSportThunk = async (params, thunkAPI) => {
+  const accessToken = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('accessToken'))
+    ?.split('=')[1];
+  if (accessToken) {
+    axiosClient.setHeaderAuth(accessToken);
+    try {
+      const response = await axiosClient.post('/sport/', params);
+      if (response) {
+        console.log(response);
+        if (response.status === 'fail') {
+          thunkAPI.dispatch(setMessageError('Sport name is aleady!'));
+        } else {
+          thunkAPI.dispatch(setMessageSuccess('Created new sport successfully'));
+          thunkAPI.dispatch(getAllSports());
+        }
+      }
+      return response;
+    } catch (error) {
+      console.log('sport error thunk: ', error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+};
 
 export const getAllSportsThunk = async (_, thunkAPI) => {
   try {
@@ -10,35 +36,7 @@ export const getAllSportsThunk = async (_, thunkAPI) => {
   }
 };
 
-//Add to sport list of owner
-export const addSportListThunk = async (sportId, thunkAPI) => {
-  const accessToken = document.cookie
-    .split('; ')
-    .find((row) => row.startsWith('accessToken'))
-    ?.split('=')[1];
-  axiosClient.setHeaderAuth(accessToken);
-  if (accessToken) {
-    const sportIdOb = {
-      sportId: sportId,
-    };
-    await axiosClient
-      .put('/sport/sportlist', sportIdOb)
-      .then((response) => {
-        if (response) {
-          thunkAPI.dispatch(getAllSports());
-          thunkAPI.dispatch(getSportOfOwner());
-          thunkAPI.dispatch(setMessageNoti(response));
-        }
-      })
-      .catch((error) => {
-        console.log('sport error thunk: ', error);
-        return thunkAPI.rejectWithValue(error);
-      });
-  }
-};
-
-//Get list sport of center
-export const getSportOfOwnerThunk = async (_, thunkAPI) => {
+export const getSportDetailThunk = async (sportId, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
     .find((row) => row.startsWith('accessToken'))
@@ -46,7 +44,96 @@ export const getSportOfOwnerThunk = async (_, thunkAPI) => {
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
     try {
-      const response = await axiosClient.getByUrl('/user/get-sport-list');
+      const response = await axiosClient.getByUrl(`/sport/${sportId}`);
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log('sport error thunk: ', error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+};
+
+export const updateSportThunk = async (params, thunkAPI) => {
+  console.log(params);
+  const accessToken = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('accessToken'))
+    ?.split('=')[1];
+  if (accessToken) {
+    axiosClient.setHeaderAuth(accessToken);
+    try {
+      const response = await axiosClient.put(`/sport/${params.sportId}`, params.newSport);
+      if (response) {
+        console.log(response);
+        thunkAPI.dispatch(getAllSports());
+        thunkAPI.dispatch(setMessageSuccess('Update sport successfully'));
+      }
+      return response;
+    } catch (error) {
+      console.log('sport error thunk: ', error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+};
+
+export const deleteSportThunk = async (sportId, thunkAPI) => {
+  const accessToken = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('accessToken'))
+    ?.split('=')[1];
+  if (accessToken) {
+    axiosClient.setHeaderAuth(accessToken);
+    try {
+      const response = await axiosClient.delete(`/sport/${sportId}`);
+      if (response) {
+        thunkAPI.dispatch(getAllSports());
+        thunkAPI.dispatch(setMessageSuccess('Deleted sport successfully'));
+      }
+      return response;
+    } catch (error) {
+      console.log('sport error thunk: ', error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+};
+
+export const activeSportThunk = async (sportId, thunkAPI) => {
+  console.log(sportId);
+  const accessToken = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('accessToken'))
+    ?.split('=')[1];
+  if (accessToken) {
+    axiosClient.setHeaderAuth(accessToken);
+    try {
+      const response = await axiosClient.put(`/sport/unblock-sport/${sportId}`);
+      if (response) {
+        thunkAPI.dispatch(getAllSports());
+        thunkAPI.dispatch(setMessageSuccess('Active sport successfully'));
+      }
+      return response;
+    } catch (error) {
+      console.log('sport error thunk: ', error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+};
+
+export const deactiveSportThunk = async (sportId, thunkAPI) => {
+  console.log(sportId);
+  const accessToken = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('accessToken'))
+    ?.split('=')[1];
+  if (accessToken) {
+    axiosClient.setHeaderAuth(accessToken);
+    try {
+      const response = await axiosClient.put(`/sport/block-sport/${sportId}`);
+      if (response) {
+        thunkAPI.dispatch(getAllSports());
+        thunkAPI.dispatch(setMessageSuccess('Deactive sport successfully'));
+      }
       return response;
     } catch (error) {
       console.log('sport error thunk: ', error);
