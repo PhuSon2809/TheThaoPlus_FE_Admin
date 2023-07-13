@@ -38,7 +38,6 @@ function UpdatePassword({ isOpenPassword, toogleOpenPassword }) {
         navigate,
         user: formik.values,
       };
-      console.log(params);
       dispatch(updatePassword(params));
       toogleOpenPassword();
       formikHelpers.resetForm();

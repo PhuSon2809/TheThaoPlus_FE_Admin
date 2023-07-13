@@ -44,6 +44,9 @@ const sportSlice = createSlice({
       state.message = action.payload;
       toast.error(state.message);
     },
+    setAddSport: (state) => {
+      state.isEditing = false;
+    },
     setEditSport: (state, action) => {
       state.isEditing = true;
       state.sport = action.payload;
@@ -150,5 +153,5 @@ const sportSlice = createSlice({
   },
 });
 
-export const { setMessageSuccess, setMessageNoti, setMessageError, setEditSport } = sportSlice.actions;
+export const { setMessageSuccess, setMessageNoti, setMessageError, setAddSport, setEditSport } = sportSlice.actions;
 export default sportSlice.reducer;

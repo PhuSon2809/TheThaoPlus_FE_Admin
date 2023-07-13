@@ -61,7 +61,6 @@ function RegisterForm() {
         newOwner,
         navigate,
       };
-      console.log(params);
       dispatch(RegisterAdmin(params));
       formikHelpers.resetForm();
     },

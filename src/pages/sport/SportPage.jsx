@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import TableSportSkeleton from 'src/components/skeleton/TableSportSkeleton';
 import { useModal } from 'src/hooks/useModal';
 import { SportListToolbar, SportTableRow } from 'src/sections/@dashboard/sport';
-import { getAllSports } from 'src/services/sport/sportSlice';
+import { getAllSports, setAddSport } from 'src/services/sport/sportSlice';
 import Scrollbar from '../../components/scrollbar';
 import { TableListHead } from '../../sections/@dashboard/table';
 import AddSportModal from 'src/sections/@dashboard/sport/AddSportModal';
@@ -131,7 +131,10 @@ function SportPage() {
                 backgroundColor: '#30ca9c',
               },
             }}
-            onClick={toogleOpenAdd}
+            onClick={() => {
+              toogleOpenAdd();
+              dispatch(setAddSport());
+            }}
           >
             Thêm mới
           </Button>

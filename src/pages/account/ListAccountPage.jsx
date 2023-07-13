@@ -89,7 +89,6 @@ function ListAccountPage() {
   const { accounts, isLoading } = useSelector((state) => state.account);
 
   let accountsNotCurrentUser = accounts.filter((account) => account._id !== user._id);
-  console.log(accountsNotCurrentUser);
 
   const [open, setOpen] = useState(null);
 

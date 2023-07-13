@@ -86,7 +86,9 @@ function SportTableRow({ sportRow, index }) {
         </TableCell>
       </TableRow>
 
-      {isOpenAdd && <AddSportModal isOpenAdd={isOpenAdd} toogleOpenAdd={toogleOpenAdd} />}
+      {isOpenAdd && (
+        <AddSportModal isOpenAdd={isOpenAdd} toogleOpenAdd={toogleOpenAdd} handleCloseMenu={handleCloseMenu} />
+      )}
 
       <Popover
         open={Boolean(open)}
@@ -137,7 +139,15 @@ function SportTableRow({ sportRow, index }) {
             <Typography variant="subtitle1">Bạn có muốn xóa môn thể thao này không?</Typography>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="secondary" size="small" onClick={toogleOpen}>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={() => {
+                toogleOpen();
+                handleCloseMenu();
+              }}
+            >
               Đóng
             </Button>
             <Button

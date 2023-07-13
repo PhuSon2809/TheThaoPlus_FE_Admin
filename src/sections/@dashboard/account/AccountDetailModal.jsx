@@ -31,8 +31,6 @@ function AccountDetailModal({ isOpenDetail, toogleOpenDetail, idToDetail }) {
 
   const { account, isLoading } = useSelector((state) => state.account);
 
-  console.log(account);
-
   useEffect(() => {
     dispatch(getAccount(idToDetail));
   }, [dispatch, idToDetail]);

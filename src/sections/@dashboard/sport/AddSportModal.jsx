@@ -21,11 +21,10 @@ import { storage } from 'src/Firebase/firebase';
 import { creatNewSport, updateSport } from 'src/services/sport/sportSlice';
 import * as Yup from 'yup';
 
-function AddSportModal({ isOpenAdd, toogleOpenAdd }) {
+function AddSportModal({ isOpenAdd, toogleOpenAdd, handleCloseMenu }) {
   const dispatch = useDispatch();
 
   const { isEditing, sport } = useSelector((state) => state.sport);
-  console.log({ isEditing, sport });
 
   // Upload Image to firebase
   const [image, setImage] = useState(isEditing && sport?.image);
@@ -153,7 +152,15 @@ function AddSportModal({ isOpenAdd, toogleOpenAdd }) {
               </FormControl>
             </DialogContent>
             <DialogActions>
-              <Button variant="contained" color="secondary" size="medium" onClick={toogleOpenAdd}>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="medium"
+                onClick={() => {
+                  toogleOpenAdd();
+                  handleCloseMenu();
+                }}
+              >
                 Đóng
               </Button>
               {isEditing ? (

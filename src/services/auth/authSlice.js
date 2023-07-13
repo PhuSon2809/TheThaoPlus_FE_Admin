@@ -35,7 +35,6 @@ const authSlice = createSlice({
       toast.info(state.message);
     },
     setMessageError: (state, action) => {
-      console.log(action.payload);
       state.message = action.payload?.message;
       toast.error(state.message);
     },
@@ -49,7 +48,6 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(RegisterAdmin.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
@@ -106,9 +104,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        console.log(action.payload);
         toast.error('Phone number is already!');
-        // toast.error(action.payload);
       })
       .addCase(updatePassword.pending, (state) => {
         state.isLoading = true;
