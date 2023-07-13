@@ -361,7 +361,15 @@ function ListAccountPage() {
             <Typography variant="subtitle1">Bạn có muốn xóa tài khoản này không?</Typography>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="secondary" size="small" onClick={toogleOpen}>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={() => {
+                toogleOpen();
+                handleCloseMenu();
+              }}
+            >
               Đóng
             </Button>
             <Button
