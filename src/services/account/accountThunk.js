@@ -1,5 +1,5 @@
 import axiosClient from 'src/api/axiosClient';
-import { getAllAccounts, setMessageSuccess } from './accountSlice';
+import { getAccount, getAllAccounts, setMessageSuccess } from './accountSlice';
 
 export const getAllAccountsThunk = async (_, thunkAPI) => {
   const accessToken = document.cookie
@@ -67,6 +67,7 @@ export const activeAccountThunk = async (accountId, thunkAPI) => {
       if (response) {
         console.log(response);
         thunkAPI.dispatch(getAllAccounts());
+        thunkAPI.dispatch(getAccount());
         thunkAPI.dispatch(setMessageSuccess('Active account successfully'));
       }
       return response;
@@ -88,6 +89,7 @@ export const deactiveAccountThunk = async (accountId, thunkAPI) => {
       const response = await axiosClient.put(`/user/block-user/${accountId}`);
       if (response) {
         thunkAPI.dispatch(getAllAccounts());
+        thunkAPI.dispatch(getAccount());
         thunkAPI.dispatch(setMessageSuccess('Deactive account successfully'));
       }
       return response;
