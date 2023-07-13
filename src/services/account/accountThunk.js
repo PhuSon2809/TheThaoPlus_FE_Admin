@@ -67,7 +67,7 @@ export const activeAccountThunk = async (accountId, thunkAPI) => {
       if (response) {
         console.log(response);
         thunkAPI.dispatch(getAllAccounts());
-        thunkAPI.dispatch(getAccount());
+        thunkAPI.dispatch(getAccount(accountId));
         thunkAPI.dispatch(setMessageSuccess('Active account successfully'));
       }
       return response;
@@ -89,7 +89,7 @@ export const deactiveAccountThunk = async (accountId, thunkAPI) => {
       const response = await axiosClient.put(`/user/block-user/${accountId}`);
       if (response) {
         thunkAPI.dispatch(getAllAccounts());
-        thunkAPI.dispatch(getAccount());
+        thunkAPI.dispatch(getAccount(accountId));
         thunkAPI.dispatch(setMessageSuccess('Deactive account successfully'));
       }
       return response;
