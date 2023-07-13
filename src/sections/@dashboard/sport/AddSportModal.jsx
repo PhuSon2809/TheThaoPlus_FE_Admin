@@ -136,7 +136,6 @@ function AddSportModal({ isOpenAdd, toogleOpenAdd }) {
                   </Box>
                 </Box>
               </Stack>
-              64af782058ec2364626fbeef
               <FormControl fullWidth sx={{ mt: 2, px: 5 }}>
                 <TextField
                   name="name"

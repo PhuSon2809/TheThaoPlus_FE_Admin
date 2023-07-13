@@ -156,61 +156,7 @@ function SportPage() {
                     {filteredSports.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                       const { _id } = row;
 
-                      return (
-                        <SportTableRow key={_id} sportRow={row} index={index} />
-                        // <TableRow hover key={_id} tabIndex={-1} role="checkbox">
-                        //   <TableCell align="center" width={60}>
-                        //     <Typography variant="subtitle2">{index + 1}</Typography>
-                        //   </TableCell>
-
-                        //   <TableCell component="th" scope="row" padding="none">
-                        //     <Stack direction="row" alignItems="center" spacing={2}>
-                        //       <Avatar alt={name} src={image} sx={{ width: 56, height: 56 }} />
-                        //       <Typography variant="subtitle2" noWrap sx={{ textTransform: 'capitalize' }}>
-                        //         {name}
-                        //       </Typography>
-                        //     </Stack>
-                        //   </TableCell>
-
-                        //   <TableCell align="left">{sportCenters.length} trung tâm thể thao</TableCell>
-
-                        //   <TableCell align="left">
-                        //     <FormControlLabel
-                        //       control={
-                        //         <Switch
-                        //           size="small"
-                        //           color="success"
-                        //           checked={status}
-                        //           onClick={() => dispatch(status ? deactiveSport(_id) : activeSport(_id))}
-                        //         />
-                        //       }
-                        //       label={
-                        //         <Label color={(status === false && 'error') || 'success'}>
-                        //           {status ? 'Hoạt động' : 'Không hoạt động'}
-                        //         </Label>
-                        //       }
-                        //     />
-                        //   </TableCell>
-
-                        //   <TableCell align="right">
-                        //     <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                        //       <MoreVertIcon
-                        //         onClick={() => {
-                        //           setSportId(_id);
-                        //         }}
-                        //       />
-                        //     </IconButton>
-                        //   </TableCell>
-                        //   {isOpenAdd && (
-                        //     <AddSportModal
-                        //       isOpenAdd={isOpenAdd}
-                        //       toogleOpenAdd={toogleOpenAdd}
-                        //       sport={row}
-                        //       sportId={sportId}
-                        //     />
-                        //   )}
-                        // </TableRow>
-                      );
+                      return <SportTableRow key={_id} sportRow={row} index={index} />;
                     })}
                     {emptyRows > 0 && (
                       <TableRow style={{ height: 53 * emptyRows }}>

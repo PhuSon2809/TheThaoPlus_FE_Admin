@@ -45,7 +45,7 @@ function SportTableRow({ sportRow, index }) {
 
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox">
+      <TableRow hover tabIndex={-1}>
         <TableCell align="center" width={60}>
           <Typography variant="subtitle2">{index + 1}</Typography>
         </TableCell>

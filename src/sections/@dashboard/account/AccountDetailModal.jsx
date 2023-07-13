@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { activeAccount, deactiveAccount, getAccount } from 'src/services/account/accountSlice';
 import moment from 'moment';
 import Label from 'src/components/label/Label';
+import AccountSkeleton from 'src/components/skeleton/AccountSkeleton';
 
 function AccountDetailModal({ isOpenDetail, toogleOpenDetail, idToDetail }) {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ function AccountDetailModal({ isOpenDetail, toogleOpenDetail, idToDetail }) {
             </Stack>
 
             {isLoading ? (
-              <></>
+              <AccountSkeleton />
             ) : (
               <Grid container columnSpacing={2}>
                 <Grid item xs={12} md={4}>
