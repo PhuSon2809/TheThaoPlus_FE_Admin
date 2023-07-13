@@ -1,11 +1,12 @@
 // @mui
+import { Box, Button, Card, CardHeader, Divider, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { Box, Stack, Link, Card, Button, Divider, Typography, CardHeader } from '@mui/material';
 // utils
 import { fToNow } from '../../../utils/formatTime';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
+import { Link } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -31,9 +32,11 @@ export default function AppNewsUpdate({ title, subheader, list, ...other }) {
       <Divider />
 
       <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button size="small" color="inherit" endIcon={<Iconify icon={'eva:arrow-ios-forward-fill'} />}>
-          View all
-        </Button>
+        <Link to="/dashboard/list-account">
+          <Button size="small" color="inherit" endIcon={<Iconify icon={'eva:arrow-ios-forward-fill'} />}>
+            View all
+          </Button>
+        </Link>
       </Box>
     </Card>
   );
@@ -51,19 +54,29 @@ NewsItem.propTypes = {
 };
 
 function NewsItem({ news }) {
-  const { image, title, description, postedAt } = news;
+  const { image, title, role, email, postedAt } = news;
 
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Box component="img" alt={title} src={image} sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} />
 
       <Box sx={{ minWidth: 240, flexGrow: 1 }}>
-        <Link color="inherit" variant="subtitle2" underline="hover" noWrap>
-          {title}
-        </Link>
+        <Stack direction="row" alignItems="center" gap={1}>
+          <Typography color="inherit" variant="subtitle2" underline="hover" noWrap textTransform="capitalize">
+            {title}
+          </Typography>
+
+          <Typography color="inherit" variant="subtitle2" underline="hover" noWrap textTransform="capitalize">
+            |
+          </Typography>
+
+          <Typography color="inherit" variant="subtitle2" underline="hover" noWrap textTransform="capitalize">
+            {role}
+          </Typography>
+        </Stack>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {description}
+          {email}
         </Typography>
       </Box>
 

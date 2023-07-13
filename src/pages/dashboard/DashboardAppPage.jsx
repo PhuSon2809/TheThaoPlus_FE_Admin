@@ -1,5 +1,6 @@
 import AttachMoneyRoundedIcon from '@mui/icons-material/AttachMoneyRounded';
-import BookOnlineRoundedIcon from '@mui/icons-material/BookOnlineRounded';
+import GroupsIcon from '@mui/icons-material/Groups';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import SportsSoccerRoundedIcon from '@mui/icons-material/SportsSoccerRounded';
 import WhereToVoteRoundedIcon from '@mui/icons-material/WhereToVoteRounded';
 import { Container, Grid, Typography } from '@mui/material';
@@ -10,13 +11,12 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AppWidgetPrice from 'src/sections/@dashboard/app/AppWidgetPrice';
+import { getAllAccounts } from 'src/services/account/accountSlice';
 import { getAllBookings } from 'src/services/booking/bookingSlice';
 import { getAllSports } from 'src/services/sport/sportSlice';
-import { getSportCentersOfOwner } from 'src/services/sportCenter/sportCenterSlice';
 import Iconify from '../../components/iconify';
 import {
   AppConversionRates,
-  AppCurrentSubject,
   AppCurrentVisits,
   AppNewsUpdate,
   AppTrafficBySite,
@@ -30,27 +30,47 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
+  const { accounts } = useSelector((state) => state.account);
   const { sports } = useSelector((state) => state.sport);
-  const { sportCenterOfOwner } = useSelector((state) => state.sportCenter);
+  const { user } = useSelector((state) => state.auth);
   const { bookings } = useSelector((state) => state.booking);
 
   useEffect(() => {
+    dispatch(getAllAccounts());
     dispatch(getAllSports());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getSportCentersOfOwner());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(getAllBookings());
   }, [dispatch]);
+
+  let accountsNotCurrentUser = accounts.filter((account) => account._id !== user._id);
+
+  const sortedData = accountsNotCurrentUser.sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return dateB - dateA;
+  });
+  console.log('sortedData', sortedData);
+
+  const totalSportCenter = sports.reduce(function (total, sport) {
+    return (total += sport.sportCenters?.length);
+  }, 0);
+
+  const userQuantity = accounts.filter((account) => account.role?.name === 'user');
+  const ownerQuantity = accounts.filter((account) => account.role?.name === 'owner');
+
+  const newAccountChart = [
+    {
+      name: 'User',
+      quantity: userQuantity?.length,
+    },
+    {
+      name: 'Owner',
+      quantity: ownerQuantity?.length,
+    },
+  ];
 
   var totalPriceBooking = bookings.reduce(function (total, booking) {
     return (total += booking.totalPrice);
   }, 0);
-
-  console.log(totalPriceBooking);
 
   return (
     <>
@@ -74,11 +94,7 @@ export default function DashboardAppPage() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Lượt Đặt Sân"
-              total={bookings.length}
-              icon={<BookOnlineRoundedIcon fontSize="large" />}
-            />
+            <AppWidgetSummary title="Người Dùng" total={accounts.length} icon={<GroupsIcon fontSize="large" />} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
@@ -93,16 +109,16 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Trung Tâm Thể Thao"
-              total={sportCenterOfOwner.length}
+              total={totalSportCenter}
               color="warning"
               icon={<WhereToVoteRoundedIcon fontSize="large" />}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={6} lg={4}>
             <AppConversionRates
               title="Đánh giá các trung tâm thể thao"
-              subheader="(+43%) so với tháng trước"
+              subheader="(+...%) so với tháng trước"
               // chartData={[
               //   { label: 'Italy', value: 400 },
               //   { label: 'Japan', value: 430 },
@@ -115,35 +131,34 @@ export default function DashboardAppPage() {
               //   { label: 'United States', value: 1200 },
               //   { label: 'United Kingdom', value: 1380 },
               // ]}
-              chartData={sportCenterOfOwner.map((sportCenter) => {
-                return { label: sportCenter.name, value: Math.random() * (1000 - 0) + 0 };
+
+              chartData={newAccountChart?.map((role) => {
+                console.log(role);
+                return { label: role.name, value: (role.quantity * 100) / accountsNotCurrentUser.length || 50 };
               })}
+              sx={{ height: '100%' }}
             />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
-              title="Môn thể thao được đặt nhiều"
-              // chartData={[
-              //   { label: 'America', value: 4344 },
-              //   { label: 'Asia', value: 5435 },
-              //   { label: 'Europe', value: 1443 },
-              //   { label: 'Africa', value: 4443 },
-              // ]}
+              title="Môn thể thao có trung tâm"
               chartData={sports.map((sport) => {
-                return { label: sport.name, value: Math.random() * (1000 - 500) + 500 };
+                return { label: sport.name, value: (sport.sportCenters?.length / totalSportCenter) * 100 };
               })}
               chartColors={[
                 theme.palette.primary.main,
+                theme.palette.success.main,
                 theme.palette.info.main,
                 theme.palette.warning.main,
                 theme.palette.error.main,
                 theme.palette.main.main,
               ]}
+              sx={{ height: '100%' }}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={6} lg={4}>
             <AppWebsiteVisits
               title="Tiếp cận trung tâm thể thao"
               subheader="(+43%) so với tháng trước"
@@ -183,7 +198,7 @@ export default function DashboardAppPage() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentSubject
               title="Dịch vụ ưa dùng"
               chartLabels={['Sân thể thao', 'Phòng thay đồ', 'Nước uống', 'Gửi xe', 'Phòng chờ']}
@@ -194,7 +209,7 @@ export default function DashboardAppPage() {
               ]}
               chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
             />
-          </Grid>
+          </Grid> */}
 
           {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentSubject
@@ -212,19 +227,13 @@ export default function DashboardAppPage() {
           <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="Đặt sân mới"
-              // list={[...Array(5)].map((booking, index) => ({
-              //   id: faker.datatype.uuid(),
-              //   title: faker.name.jobTitle(),
-              //   description: faker.name.jobTitle(),
-              //   image: `/assets/images/covers/cover_${index + 1}.jpg`,
-              //   postedAt: faker.date.recent(),
-              // }))}
-              list={bookings.slice(-5).map((booking, index) => ({
-                id: booking._id,
-                title: booking.sportCenter.name,
-                description: booking.sportField.name,
-                image: booking.sportCenter.image,
-                postedAt: moment(booking.createdAt),
+              list={sortedData.slice(0, 5).map((account, index) => ({
+                id: account._id,
+                title: account.firstname + ' ' + account.lastname,
+                role: account.role?.name,
+                email: account.email,
+                image: account.image,
+                postedAt: moment(account.createdAt),
               }))}
             />
           </Grid>
@@ -255,21 +264,25 @@ export default function DashboardAppPage() {
                   name: 'FaceBook',
                   value: 323234,
                   icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} />,
+                  link: 'https://www.facebook.com/exethethaoplus',
+                },
+                {
+                  name: 'Instagram',
+                  value: 341212,
+                  icon: <InstagramIcon fontSize="large" sx={{ color: '#fb5245' }} />,
+                  link: 'https://www.instagram.com/the_thao_plus/',
                 },
                 {
                   name: 'Google',
                   value: 341212,
                   icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} />,
-                },
-                {
-                  name: 'Linkedin',
-                  value: 411213,
-                  icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} />,
+                  link: 'https://www.facebook.com/exethethaoplus',
                 },
                 {
                   name: 'Twitter',
                   value: 443232,
                   icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} />,
+                  link: 'https://www.facebook.com/exethethaoplus',
                 },
               ]}
             />

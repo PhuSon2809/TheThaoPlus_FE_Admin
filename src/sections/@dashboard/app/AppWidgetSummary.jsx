@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import { Box, Card, CircularProgress, Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import { fShortenNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
@@ -52,8 +52,18 @@ export default function AppWidgetSummary({ title, total, icon, color = 'primary'
         {icon}
       </StyledIcon>
 
-      <Typography variant="h3">{fShortenNumber(total)}</Typography>
-
+      {total === 0 ? (
+        <Box p={0.987}>
+          <CircularProgress
+            size={26}
+            sx={{
+              color: (theme) => theme.palette[color].dark,
+            }}
+          />
+        </Box>
+      ) : (
+        <Typography variant="h3">{fShortenNumber(total)}</Typography>
+      )}
       <Typography variant="subtitle1" sx={{ opacity: 0.72 }}>
         {title}
       </Typography>

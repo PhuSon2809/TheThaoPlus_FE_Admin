@@ -1,4 +1,4 @@
-import { Card, Typography } from '@mui/material';
+import { Box, Card, CircularProgress, Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import formatCurrency from 'src/utils/formatPrice';
@@ -52,7 +52,18 @@ export default function AppWidgetPrice({ title, total, icon, color = 'primary', 
         {icon}
       </StyledIcon>
 
-      <Typography variant="h3">{formatCurrency(total)}</Typography>
+      {total === 0 ? (
+        <Box p={0.987}>
+          <CircularProgress
+            size={26}
+            sx={{
+              color: (theme) => theme.palette[color].dark,
+            }}
+          />
+        </Box>
+      ) : (
+        <Typography variant="h3">{formatCurrency(total)}</Typography>
+      )}
 
       <Typography variant="subtitle1" sx={{ opacity: 0.72 }}>
         {title}
