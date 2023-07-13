@@ -49,11 +49,11 @@ function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 2, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={user.image} alt={user.lastname} />
+            <Avatar src={user?.image} alt={user?.lastname} />
 
             <Box ml={2}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {user.firstname} {user.lastname}
+                {user?.firstname} {user?.lastname}
               </Typography>
             </Box>
           </StyledAccount>

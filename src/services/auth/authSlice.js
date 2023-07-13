@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { loginAdminThunk, logoutThunk, registerAdminThunk, updateAdminThunk } from './authThunk';
+import { loginAdminThunk, logoutThunk, registerAdminThunk, updateAdminThunk, updatePasswordThunk } from './authThunk';
 
 const getUserfromLocalStorage = localStorage.getItem('userInfoAdmin')
   ? JSON.parse(localStorage.getItem('userInfoAdmin'))
@@ -20,6 +20,7 @@ export const RegisterAdmin = createAsyncThunk('auth/RegisterAdmin', registerAdmi
 export const LoginAdmin = createAsyncThunk('auth/LoginAdmin', loginAdminThunk);
 export const logoutAccount = createAsyncThunk('auth/Logout', logoutThunk);
 export const updateAccount = createAsyncThunk('auth/UpdateAdmin', updateAdminThunk);
+export const updatePassword = createAsyncThunk('auth/UpdatePassword', updatePasswordThunk);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -28,6 +29,15 @@ const authSlice = createSlice({
     setMessageSuccess: (state, action) => {
       state.message = action.payload;
       toast.success(state.message);
+    },
+    setMessageNoti: (state, action) => {
+      state.message = action.payload?.message;
+      toast.info(state.message);
+    },
+    setMessageError: (state, action) => {
+      console.log(action.payload);
+      state.message = action.payload?.message;
+      toast.error(state.message);
     },
     setEditUser: (state) => {
       state.isEditing = true;
@@ -99,9 +109,22 @@ const authSlice = createSlice({
         console.log(action.payload);
         toast.error('Phone number is already!');
         // toast.error(action.payload);
+      })
+      .addCase(updatePassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
       });
   },
 });
 
-export const { setMessageSuccess, setEditUser } = authSlice.actions;
+export const { setMessageSuccess, setMessageNoti, setMessageError, setEditUser } = authSlice.actions;
 export default authSlice.reducer;

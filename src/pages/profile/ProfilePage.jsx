@@ -39,33 +39,33 @@ function ProfilePage(props) {
               <Card>
                 <Grid container columnSpacing={5} sx={{ p: 4 }}>
                   <Grid item md={4}>
-                    <Avatar src={user?.image} alt={user.lastname} sx={{ width: 250, height: 250 }} />
+                    <Avatar src={user?.image} alt={user?.lastname} sx={{ width: 250, height: 250 }} />
                   </Grid>
                   <Grid item md={8}>
                     <Stack direction="column" gap={2} fullWidth>
                       <Typography component="h6" variant="h3">
-                        {user.firstname} {user.lastname}
+                        {user?.firstname} {user?.lastname}
                       </Typography>
 
                       <Stack direction="row" justifyContent="space-between" fullWidth>
                         <Stack direction="row" gap={1}>
                           <LocalPhoneRoundedIcon color="main" />
-                          <Typography>{user.phone}</Typography>
+                          <Typography>{user?.phone}</Typography>
                         </Stack>
                         <Stack direction="row" gap={1}>
                           <EmailIcon color="main" />
-                          <Typography>{user.email}</Typography>
+                          <Typography>{user?.email}</Typography>
                         </Stack>
                       </Stack>
 
                       <Stack direction="row" justifyContent="space-between" fullWidth>
                         <Stack direction="row" gap={1}>
                           <Typography>Gender:</Typography>
-                          <Typography textTransform="capitalize">{user.gender}</Typography>
+                          <Typography textTransform="capitalize">{user?.gender}</Typography>
                         </Stack>
                         <Stack direction="row" gap={1}>
                           <Typography>YOB:</Typography>
-                          <Typography textTransform="capitalize">{moment(user.YOB).format('DD-MM-YYYY')}</Typography>
+                          <Typography textTransform="capitalize">{moment(user?.YOB).format('DD-MM-YYYY')}</Typography>
                         </Stack>
                       </Stack>
                     </Stack>

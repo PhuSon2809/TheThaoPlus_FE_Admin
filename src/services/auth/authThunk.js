@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import axiosClient from 'src/api/axiosClient';
-import { setMessageSuccess } from './authSlice';
+import { logoutAccount, setMessageError, setMessageSuccess } from './authSlice';
 
 export const registerAdminThunk = async (params, thunkAPI) => {
   try {
@@ -47,10 +47,10 @@ export const logoutThunk = async (navigate, thunkAPI) => {
     // const res = await axiosClient.getByUrl(`/user/logout`);
     Cookie.remove('refreshToken');
     Cookie.remove('accessToken');
-    Cookie.remove('userInfo');
+    Cookie.remove('userInfoAdmin');
 
     navigate('/login');
-    localStorage.removeItem('userInfo');
+    localStorage.removeItem('userInfoAdmin');
   } catch (error) {
     console.log('logout error thunk: ', error);
     return thunkAPI.rejectWithValue(error);
@@ -83,6 +83,34 @@ export const updateAdminThunk = async (params, thunkAPI) => {
         };
         localStorage.setItem('userInfo', JSON.stringify(userLocalStorage));
         thunkAPI.dispatch(setMessageSuccess('Update user successfully'));
+      }
+      return response;
+    } catch (error) {
+      console.log('sport error thunk: ', error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+};
+
+export const updatePasswordThunk = async (params, thunkAPI) => {
+  console.log(params);
+  const accessToken = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('accessToken'))
+    ?.split('=')[1];
+  if (accessToken) {
+    axiosClient.setHeaderAuth(accessToken);
+    try {
+      console.log('Go update');
+      const response = await axiosClient.put(`/user/password`, params.user);
+      if (response) {
+        if (response.status === 'fail') {
+          thunkAPI.dispatch(setMessageError(response));
+        } else {
+          console.log('response', response);
+          thunkAPI.dispatch(logoutAccount(params.navigate));
+          thunkAPI.dispatch(setMessageSuccess('Update password successfully'));
+        }
       }
       return response;
     } catch (error) {

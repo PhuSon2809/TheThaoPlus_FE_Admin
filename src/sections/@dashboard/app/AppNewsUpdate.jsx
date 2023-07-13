@@ -1,12 +1,11 @@
-// @mui
 import { Box, Button, Card, CardHeader, Divider, Stack, Typography } from '@mui/material';
+import moment from 'moment';
 import PropTypes from 'prop-types';
-// utils
-import { fToNow } from '../../../utils/formatTime';
-// components
+import { Link } from 'react-router-dom';
+
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
-import { Link } from 'react-router-dom';
+import { fToNow } from '../../../utils/formatTime';
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +47,7 @@ NewsItem.propTypes = {
   news: PropTypes.shape({
     description: PropTypes.string,
     image: PropTypes.string,
-    postedAt: PropTypes.instanceOf(Date),
+    postedAt: PropTypes.string,
     title: PropTypes.string,
   }),
 };
@@ -81,7 +80,7 @@ function NewsItem({ news }) {
       </Box>
 
       <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
-        {fToNow(postedAt)}
+        {fToNow(moment(postedAt))}
       </Typography>
     </Stack>
   );

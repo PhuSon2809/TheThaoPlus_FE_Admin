@@ -5,7 +5,6 @@ import SportsSoccerRoundedIcon from '@mui/icons-material/SportsSoccerRounded';
 import WhereToVoteRoundedIcon from '@mui/icons-material/WhereToVoteRounded';
 import { Container, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,7 +47,6 @@ export default function DashboardAppPage() {
     const dateB = new Date(b.createdAt);
     return dateB - dateA;
   });
-  console.log('sortedData', sortedData);
 
   const totalSportCenter = sports.reduce(function (total, sport) {
     return (total += sport.sportCenters?.length);
@@ -133,7 +131,6 @@ export default function DashboardAppPage() {
               // ]}
 
               chartData={newAccountChart?.map((role) => {
-                console.log(role);
                 return { label: role.name, value: (role.quantity * 100) / accountsNotCurrentUser.length || 50 };
               })}
               sx={{ height: '100%' }}
@@ -211,19 +208,6 @@ export default function DashboardAppPage() {
             />
           </Grid> */}
 
-          {/* <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentSubject
-              title="Current Subject"
-              chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
-              chartData={[
-                { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-              ]}
-              chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
-            />
-          </Grid> */}
-
           <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="Đặt sân mới"
@@ -233,7 +217,7 @@ export default function DashboardAppPage() {
                 role: account.role?.name,
                 email: account.email,
                 image: account.image,
-                postedAt: moment(account.createdAt),
+                postedAt: account.createdAt,
               }))}
             />
           </Grid>

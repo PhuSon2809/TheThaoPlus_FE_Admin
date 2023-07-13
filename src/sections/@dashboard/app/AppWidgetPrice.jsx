@@ -20,7 +20,7 @@ const StyledIcon = styled('div')(({ theme }) => ({
 
 AppWidgetPrice.propTypes = {
   color: PropTypes.string,
-  icon: PropTypes.string,
+  icon: PropTypes.object,
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   sx: PropTypes.object,

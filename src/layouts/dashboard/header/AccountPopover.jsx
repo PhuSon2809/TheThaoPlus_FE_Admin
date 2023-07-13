@@ -56,7 +56,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={user.image} alt={user.lastname} />
+        <Avatar src={user?.image} alt={user?.lastname} />
       </IconButton>
 
       <Popover
@@ -80,10 +80,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user.firstname} {user.lastname}
+            {user?.firstname} {user?.lastname}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user.email}
+            {user?.email}
           </Typography>
         </Box>
 
