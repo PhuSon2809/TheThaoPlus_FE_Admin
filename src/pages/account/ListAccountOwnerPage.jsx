@@ -224,7 +224,7 @@ function ListAccountOwnerPage() {
                           <TableCell align="left">
                             {/* {bookingforOwner.length + bookingforUser.length}{' '}
                             {bookingforOwner.length + bookingforUser.length > 1 ? 'bookings' : 'booking'} */}
-                            {Math.floor(Math.random() * 20) + 1} bookings
+                            {Math.floor(Math.random() * 15) + 1} bookings
                           </TableCell>
                           <TableCell align="left">
                             <Label
