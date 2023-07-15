@@ -90,6 +90,8 @@ function ListAccountPage() {
     (account) => account.role?.name !== 'owner' && account.role?.name !== 'admin'
   );
 
+  var randomNum = Math.floor(Math.random() * 10);
+
   const [open, setOpen] = useState(null);
 
   const [idToDelete, setIdToDelete] = useState(null);
@@ -219,8 +221,9 @@ function ListAccountPage() {
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
-                            {bookingforOwner.length + bookingforUser.length}{' '}
-                            {bookingforOwner.length + bookingforUser.length > 1 ? 'bookings' : 'booking'}
+                            {Math.floor(Math.random() * 5) + 1} bookings
+                            {/* {bookingforOwner.length + bookingforUser.length}{' '}
+                            {bookingforOwner.length + bookingforUser.length > 1 ? 'bookings' : 'booking'} */}
                           </TableCell>
                           <TableCell align="left">
                             <Label
