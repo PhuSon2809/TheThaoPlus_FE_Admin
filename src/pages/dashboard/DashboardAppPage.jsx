@@ -246,28 +246,28 @@ export default function DashboardAppPage() {
               list={[
                 {
                   name: 'FaceBook',
-                  value: 323234,
+                  value: 656,
                   icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} />,
                   link: 'https://www.facebook.com/exethethaoplus',
                 },
                 {
                   name: 'Instagram',
-                  value: 341212,
+                  value: 371,
                   icon: <InstagramIcon fontSize="large" sx={{ color: '#fb5245' }} />,
                   link: 'https://www.instagram.com/the_thao_plus/',
                 },
-                {
-                  name: 'Google',
-                  value: 341212,
-                  icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} />,
-                  link: 'https://www.facebook.com/exethethaoplus',
-                },
-                {
-                  name: 'Twitter',
-                  value: 443232,
-                  icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} />,
-                  link: 'https://www.facebook.com/exethethaoplus',
-                },
+                // {
+                //   name: 'Google',
+                //   value: 341212,
+                //   icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} />,
+                //   link: 'https://www.facebook.com/exethethaoplus',
+                // },
+                // {
+                //   name: 'Twitter',
+                //   value: 443232,
+                //   icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} />,
+                //   link: 'https://www.facebook.com/exethethaoplus',
+                // },
               ]}
             />
           </Grid>
