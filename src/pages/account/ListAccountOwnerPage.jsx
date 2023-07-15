@@ -40,6 +40,7 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Họ & Tên', alignRight: false },
   { id: 'sdt', label: 'Số điện thoại', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
+  { id: 'sportCenter', label: 'Trung tâm', alignRight: false },
   { id: 'booking', label: 'Booking', alignRight: false },
   { id: 'role', label: 'Vai trò', alignRight: false },
   { id: 'status', label: 'Trạng thái', alignRight: false },
@@ -78,7 +79,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function ListAccountPage() {
+function ListAccountOwnerPage() {
   const dispatch = useDispatch();
 
   const { toogleOpen, isOpen } = useModal();
@@ -87,7 +88,7 @@ function ListAccountPage() {
   const { accounts, isLoading } = useSelector((state) => state.account);
 
   const accountsNotCurrentUser = accounts.filter(
-    (account) => account.role?.name !== 'owner' && account.role?.name !== 'admin'
+    (account) => account.role?.name !== 'user' && account.role?.name !== 'admin'
   );
 
   const [open, setOpen] = useState(null);
@@ -180,6 +181,7 @@ function ListAccountPage() {
                         phone,
                         role,
                         email,
+                        sportCenters,
                         bookingforOwner,
                         bookingforUser,
                         image,
@@ -218,6 +220,7 @@ function ListAccountPage() {
                               {email}
                             </Typography>
                           </TableCell>
+                          <TableCell align="left">{sportCenters.length} trung tâm</TableCell>
                           <TableCell align="left">
                             {bookingforOwner.length + bookingforUser.length}{' '}
                             {bookingforOwner.length + bookingforUser.length > 1 ? 'bookings' : 'booking'}
@@ -389,4 +392,4 @@ function ListAccountPage() {
   );
 }
 
-export default ListAccountPage;
+export default ListAccountOwnerPage;

@@ -9,5 +9,15 @@ import SportPage from './sport/SportPage';
 import ProfilePage from './profile/ProfilePage';
 
 import ListAccountPage from './account/ListAccountPage';
+import ListAccountOwnerPage from './account/ListAccountOwnerPage';
 
-export { DashboardAppPage, ListAccountPage, LoginPage, Page404, ProfilePage, RegisterPage, SportPage };
+export {
+  DashboardAppPage,
+  ListAccountPage,
+  ListAccountOwnerPage,
+  LoginPage,
+  Page404,
+  ProfilePage,
+  RegisterPage,
+  SportPage,
+};

@@ -25,15 +25,24 @@ import { activeAccount, deactiveAccount, getAccount } from 'src/services/account
 import moment from 'moment';
 import Label from 'src/components/label/Label';
 import AccountSkeleton from 'src/components/skeleton/AccountSkeleton';
+import palette from 'src/theme/palette';
+import { getAllSports } from 'src/services/sport/sportSlice';
 
 function AccountDetailModal({ isOpenDetail, toogleOpenDetail, idToDetail }) {
   const dispatch = useDispatch();
 
   const { account, isLoading } = useSelector((state) => state.account);
+  const { sports } = useSelector((state) => state.sport);
+
+  console.log(account);
 
   useEffect(() => {
     dispatch(getAccount(idToDetail));
   }, [dispatch, idToDetail]);
+
+  useEffect(() => {
+    dispatch(getAllSports());
+  }, [dispatch]);
 
   return (
     <>
@@ -46,7 +55,7 @@ function AccountDetailModal({ isOpenDetail, toogleOpenDetail, idToDetail }) {
             </Stack>
 
             {isLoading ? (
-              <AccountSkeleton />
+              <AccountSkeleton role={account.role?.name} />
             ) : (
               <Grid container columnSpacing={2}>
                 <Grid item xs={12} md={4}>
@@ -149,11 +158,63 @@ function AccountDetailModal({ isOpenDetail, toogleOpenDetail, idToDetail }) {
                           </Label>
                         </Stack>
 
-                        <Divider sx={{ my: 2 }} />
+                        <Divider sx={{ my: 2.2 }} />
                       </Grid>
                     </Grid>
                   </Stack>
                 </Grid>
+
+                {account.role?.name === 'owner' && (
+                  <Stack paddingX={3} mt={5}>
+                    <Typography variant="h5">Trung tâm sở hữu</Typography>
+
+                    <Stack direction="column" gap={2} mt={1}>
+                      {account.sportCenters?.map((sportCenter) => (
+                        <Stack
+                          direction="row"
+                          gap={1}
+                          p={2}
+                          sx={{ backgroundColor: palette.grey[200] }}
+                          borderRadius={2}
+                        >
+                          <Avatar
+                            variant="square"
+                            src={sportCenter?.image}
+                            alt={sportCenter.name}
+                            sx={{ width: 100, height: 100, borderRadius: 1 }}
+                          />
+
+                          <Stack>
+                            <Typography variant="h5">{sportCenter.name}</Typography>
+                            <Typography variant="subtitle1" mb={1}>
+                              {sportCenter.address}
+                            </Typography>
+                            {sports.map((sport) => (
+                              <Box>
+                                {sport._id === sportCenter.sport && (
+                                  <Label
+                                    color={
+                                      sport.name === 'bóng đá'
+                                        ? 'success'
+                                        : sport.name === 'bóng rổ'
+                                        ? 'warning'
+                                        : sport.name === 'cầu lông'
+                                        ? 'primary'
+                                        : 'error'
+                                    }
+                                    sx={{ textTransform: 'capitalize', fontSize: '16px' }}
+                                  >
+                                    {sport.name}
+                                  </Label>
+                                )}
+                              </Box>
+                            ))}
+                          </Stack>
+                        </Stack>
+                      ))}
+                    </Stack>
+                  </Stack>
+                )}
               </Grid>
             )}
           </DialogContent>

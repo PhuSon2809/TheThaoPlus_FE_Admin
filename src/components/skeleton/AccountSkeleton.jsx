@@ -1,6 +1,8 @@
 import { Divider, Grid, Skeleton, Stack } from '@mui/material';
+import palette from 'src/theme/palette';
 
-function AccountSkeleton() {
+function AccountSkeleton({ role }) {
+  console.log(role);
   return (
     <Grid container columnSpacing={2}>
       <Grid item xs={12} md={4}>
@@ -55,6 +57,26 @@ function AccountSkeleton() {
           </Grid>
         </Stack>
       </Grid>
+
+      {role === 'owner' && (
+        <Stack paddingX={3} mt={5}>
+          <Skeleton width={250} height={40} />
+
+          <Stack direction="column" gap={2} mt={1}>
+            {Array.from({ length: 1 }).map(() => (
+              <Stack direction="row" gap={1} p={2} sx={{ backgroundColor: palette.grey[100] }} borderRadius={2}>
+                <Skeleton variant="rounded" width={100} height={100} />
+
+                <Stack>
+                  <Skeleton width={350} />
+                  <Skeleton width={500} />
+                  <Skeleton variant="rounded" width={90} height={20} />
+                </Stack>
+              </Stack>
+            ))}
+          </Stack>
+        </Stack>
+      )}
     </Grid>
   );
 }

@@ -1,5 +1,14 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { DashboardAppPage, ListAccountPage, LoginPage, Page404, ProfilePage, RegisterPage, SportPage } from 'src/pages';
+import {
+  DashboardAppPage,
+  ListAccountOwnerPage,
+  ListAccountPage,
+  LoginPage,
+  Page404,
+  ProfilePage,
+  RegisterPage,
+  SportPage,
+} from 'src/pages';
 import DashboardLayout from '../layouts/dashboard';
 import SimpleLayout from '../layouts/simple';
 import PrivateRoute from './PrivateRoute';
@@ -32,6 +41,10 @@ export const adminRoute = [
   {
     path: 'list-account',
     component: <ListAccountPage />,
+  },
+  {
+    path: 'list-owner',
+    component: <ListAccountOwnerPage />,
   },
   {
     path: 'profile',
