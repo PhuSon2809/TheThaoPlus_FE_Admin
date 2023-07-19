@@ -42,6 +42,41 @@ export const loginAdminThunk = async (params, thunkAPI) => {
   }
 };
 
+export const forgotPasswordThunk = async (params, thunkAPI) => {
+  console.log(params);
+  try {
+    const res = await axiosClient.post(`/user/forgot-password-token`, params.data);
+    if (res.token) {
+      console.log(res);
+      params.navigation(`/reset-password/${res.token}`);
+      thunkAPI.dispatch(setMessageSuccess('Add new password to reset!'));
+    }
+    return res;
+  } catch (error) {
+    console.log('forgot pass error thunk: ', error);
+    const message = await error.data.message;
+    return thunkAPI.rejectWithValue(message);
+  }
+};
+
+export const resetPasswordThunk = async (params, thunkAPI) => {
+  try {
+    const res = await axiosClient.put(`/user/reset-password/${params.token}`, params.data);
+    if (res) {
+      console.log(res);
+      if (res.status === 200) {
+        params.navigation('/login');
+        thunkAPI.dispatch(setMessageSuccess('Reset Password Successful! Login again.'));
+      }
+    }
+    return res;
+  } catch (error) {
+    console.log('reset pass error thunk: ', error);
+    const message = await error.data.message;
+    return thunkAPI.rejectWithValue(message);
+  }
+};
+
 export const logoutThunk = async (navigate, thunkAPI) => {
   try {
     // const res = await axiosClient.getByUrl(`/user/logout`);

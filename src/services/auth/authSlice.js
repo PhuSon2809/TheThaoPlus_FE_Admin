@@ -1,6 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { loginAdminThunk, logoutThunk, registerAdminThunk, updateAdminThunk, updatePasswordThunk } from './authThunk';
+import {
+  forgotPasswordThunk,
+  loginAdminThunk,
+  logoutThunk,
+  registerAdminThunk,
+  resetPasswordThunk,
+  updateAdminThunk,
+  updatePasswordThunk,
+} from './authThunk';
 
 const getUserfromLocalStorage = localStorage.getItem('userInfoAdmin')
   ? JSON.parse(localStorage.getItem('userInfoAdmin'))
@@ -21,6 +29,8 @@ export const LoginAdmin = createAsyncThunk('auth/LoginAdmin', loginAdminThunk);
 export const logoutAccount = createAsyncThunk('auth/Logout', logoutThunk);
 export const updateAccount = createAsyncThunk('auth/UpdateAdmin', updateAdminThunk);
 export const updatePassword = createAsyncThunk('auth/UpdatePassword', updatePasswordThunk);
+export const forgotPassword = createAsyncThunk('auth/forgotPassword', forgotPasswordThunk);
+export const resetPassword = createAsyncThunk('auth/resetPassword', resetPasswordThunk);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -115,6 +125,32 @@ const authSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(updatePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

@@ -1,12 +1,14 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   DashboardAppPage,
+  ForgotPasswordPage,
   ListAccountOwnerPage,
   ListAccountPage,
   LoginPage,
   Page404,
   ProfilePage,
   RegisterPage,
+  ResetPasswordPage,
   SportPage,
 } from 'src/pages';
 import DashboardLayout from '../layouts/dashboard';
@@ -25,6 +27,18 @@ export const publicRoute = [
     key: 'register',
     path: 'register',
     component: <RegisterPage />,
+    index: false,
+  },
+  {
+    key: 'forgot-password',
+    path: 'forgot-password',
+    component: <ForgotPasswordPage />,
+    index: false,
+  },
+  {
+    key: 'reset-password',
+    path: 'reset-password/:token',
+    component: <ResetPasswordPage />,
     index: false,
   },
 ];

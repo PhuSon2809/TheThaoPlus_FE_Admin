@@ -1,10 +1,10 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton, Skeleton, Stack, TableBody, TableCell, TableRow } from '@mui/material';
 
-function TableSportSkeleton() {
+function TableSportSkeleton({ length }) {
   return (
     <TableBody>
-      {Array.from({ length: 5 }).map((_, index) => (
+      {Array.from({ length: length }).map((_, index) => (
         <TableRow key={index}>
           <TableCell align="center" width={60}>
             <Stack direction="row" alignItems="center" justifyContent="center">

@@ -4,7 +4,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import 'tippy.js/dist/tippy.css';
 
 // ----------------------------------------------------------------------
 

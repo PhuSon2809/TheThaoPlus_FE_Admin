@@ -153,7 +153,7 @@ function SportPage() {
                   onRequestSort={handleRequestSort}
                 />
                 {isLoading ? (
-                  <TableSportSkeleton />
+                  <TableSportSkeleton length={filteredSports.length} />
                 ) : (
                   <TableBody>
                     {filteredSports.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
