@@ -23,8 +23,8 @@ export const loginAdminThunk = async (params, thunkAPI) => {
       console.log('res', res);
       thunkAPI.dispatch(setMessageError('Account does not exist! Try again.'));
     } else {
-      Cookie.set('accessTokenAdmin', res.token);
-      Cookie.set('refreshTokenAdmin', res.user?.refreshToken);
+      Cookie.set('AdminAccessToken', res.token);
+      Cookie.set('AdminRefreshToken', res.user?.refreshToken);
       const userLocalStorage = {
         _id: res.user._id,
         firstname: res.user.firstname,
@@ -85,8 +85,8 @@ export const resetPasswordThunk = async (params, thunkAPI) => {
 export const logoutThunk = async (navigate, thunkAPI) => {
   try {
     // const res = await axiosClient.getByUrl(`/user/logout`);
-    Cookie.remove('refreshToken');
-    Cookie.remove('accessToken');
+    Cookie.remove('AdminRefreshToken');
+    Cookie.remove('AdminAccessToken');
     Cookie.remove('userInfoAdmin');
 
     navigate('/login');

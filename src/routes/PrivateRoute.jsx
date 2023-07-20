@@ -6,7 +6,7 @@ function PrivateRoute({ allowedRoles }) {
 
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessTokenAdmin'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
 
   const [user, setUser] = useState(accessToken || null);
