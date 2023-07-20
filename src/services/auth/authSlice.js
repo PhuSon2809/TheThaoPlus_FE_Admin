@@ -45,7 +45,8 @@ const authSlice = createSlice({
       toast.info(state.message);
     },
     setMessageError: (state, action) => {
-      state.message = action.payload?.message;
+      state.message = action.payload;
+      console.log(action.payload);
       toast.error(state.message);
     },
     setEditUser: (state) => {
@@ -84,6 +85,7 @@ const authSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
+        console.log(action.payload);
         toast.error(action.payload);
       })
       .addCase(logoutAccount.pending, (state) => {

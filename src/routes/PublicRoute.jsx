@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 export default function PublicRoute() {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('accessTokenAdmin'))
     ?.split('=')[1];
   const [user, setUser] = useState(accessToken || null);
 

@@ -19,21 +19,26 @@ export const registerAdminThunk = async (params, thunkAPI) => {
 export const loginAdminThunk = async (params, thunkAPI) => {
   try {
     const res = await axiosClient.post(`/user/admin-login`, params.user);
-    Cookie.set('accessToken', res.token);
-    Cookie.set('refreshToken', res.user?.refreshToken);
-    const userLocalStorage = {
-      _id: res.user._id,
-      firstname: res.user.firstname,
-      lastname: res.user.lastname,
-      email: res.user.email,
-      phone: res.user.phone,
-      image: res.user.image,
-      gender: res.user.gender,
-      YOB: res.user.YOB,
-      role: res.user?.role.name,
-    };
-    params.navigate('/dashboard/app', { replace: true });
-    localStorage.setItem('userInfoAdmin', JSON.stringify(userLocalStorage));
+    if (res?.status === 'fail') {
+      console.log('res', res);
+      thunkAPI.dispatch(setMessageError('Account does not exist! Try again.'));
+    } else {
+      Cookie.set('accessTokenAdmin', res.token);
+      Cookie.set('refreshTokenAdmin', res.user?.refreshToken);
+      const userLocalStorage = {
+        _id: res.user._id,
+        firstname: res.user.firstname,
+        lastname: res.user.lastname,
+        email: res.user.email,
+        phone: res.user.phone,
+        image: res.user.image,
+        gender: res.user.gender,
+        YOB: res.user.YOB,
+        role: res.user?.role.name,
+      };
+      params.navigate('/dashboard/app', { replace: true });
+      localStorage.setItem('userInfoAdmin', JSON.stringify(userLocalStorage));
+    }
     return res;
   } catch (error) {
     console.log('login error thunk: ', error);

@@ -32,7 +32,6 @@ export default function DashboardAppPage() {
   const { accounts } = useSelector((state) => state.account);
   const { sports } = useSelector((state) => state.sport);
   const { user } = useSelector((state) => state.auth);
-  const { bookings } = useSelector((state) => state.booking);
 
   useEffect(() => {
     dispatch(getAllAccounts());
@@ -41,6 +40,10 @@ export default function DashboardAppPage() {
   }, [dispatch]);
 
   let accountsNotCurrentUser = accounts.filter((account) => account._id !== user._id);
+
+  const accountsNotOwnerUser = accounts.filter(
+    (account) => account.role?.name !== 'owner' && account.role?.name !== 'admin'
+  );
 
   const sortedData = accountsNotCurrentUser.sort((a, b) => {
     const dateA = new Date(a.createdAt);
@@ -66,9 +69,13 @@ export default function DashboardAppPage() {
     },
   ];
 
-  var totalPriceBooking = bookings.reduce(function (total, booking) {
-    return (total += booking.totalPrice);
+  console.log(accountsNotOwnerUser);
+
+  var totalBooking = accountsNotOwnerUser.reduce(function (total, account) {
+    return (total += account.bookingforUser?.length);
   }, 0);
+
+  console.log(totalBooking);
 
   return (
     <>
@@ -82,7 +89,7 @@ export default function DashboardAppPage() {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={6}>
             <AppWidgetPrice
               title="Doanh Thu"
               total={2350000}
@@ -91,11 +98,15 @@ export default function DashboardAppPage() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={6}>
+            <AppWidgetSummary title="Bookings" total={totalBooking} icon={<GroupsIcon fontSize="large" />} />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={4}>
             <AppWidgetSummary title="Người Dùng" total={accounts.length} icon={<GroupsIcon fontSize="large" />} />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
             <AppWidgetSummary
               title="Môn Thể Thao"
               total={sports.length}
@@ -104,7 +115,7 @@ export default function DashboardAppPage() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
             <AppWidgetSummary
               title="Trung Tâm Thể Thao"
               total={totalSportCenter}
@@ -210,7 +221,7 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
-              title="Đặt sân mới"
+              title="Người dùng mới"
               list={sortedData.slice(0, 5).map((account, index) => ({
                 id: account._id,
                 title: account.firstname + ' ' + account.lastname,

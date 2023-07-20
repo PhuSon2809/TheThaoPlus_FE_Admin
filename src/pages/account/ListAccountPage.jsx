@@ -30,11 +30,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import TableAccountSkeleton from 'src/components/skeleton/TableAccountSkeleton';
 import { useModal } from 'src/hooks/useModal';
+import AccountDetailModal from 'src/sections/@dashboard/account/AccountDetailModal';
 import { activeAccount, deactiveAccount, deleteAccount, getAllAccounts } from 'src/services/account/accountSlice';
 import Label from '../../components/label';
 import Scrollbar from '../../components/scrollbar';
 import { TableListHead, UserListToolbar } from '../../sections/@dashboard/table';
-import AccountDetailModal from 'src/sections/@dashboard/account/AccountDetailModal';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Họ & Tên', alignRight: false },
@@ -89,8 +89,6 @@ function ListAccountPage() {
   const accountsNotCurrentUser = accounts.filter(
     (account) => account.role?.name !== 'owner' && account.role?.name !== 'admin'
   );
-
-  var randomNum = Math.floor(Math.random() * 10);
 
   const [open, setOpen] = useState(null);
 
@@ -221,9 +219,9 @@ function ListAccountPage() {
                             </Typography>
                           </TableCell>
                           <TableCell align="left">
-                            {Math.floor(Math.random() * 5) + 1} bookings
-                            {/* {bookingforOwner.length + bookingforUser.length}{' '}
-                            {bookingforOwner.length + bookingforUser.length > 1 ? 'bookings' : 'booking'} */}
+                            {/* {Math.floor(Math.random() * 5) + 1} bookings */}
+                            {bookingforOwner.length + bookingforUser.length}{' '}
+                            {bookingforOwner.length + bookingforUser.length > 1 ? 'bookings' : 'booking'}
                           </TableCell>
                           <TableCell align="left">
                             <Label
