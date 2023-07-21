@@ -153,7 +153,7 @@ function ListAccountOwnerPage() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Danh sách người dùng
+            Danh sách chủ sân
           </Typography>
         </Stack>
 

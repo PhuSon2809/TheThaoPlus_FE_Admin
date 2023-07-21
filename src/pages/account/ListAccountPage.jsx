@@ -85,6 +85,7 @@ function ListAccountPage() {
   const { toogleOpen: toogleOpenDetail, isOpen: isOpenDetail } = useModal();
 
   const { accounts, isLoading } = useSelector((state) => state.account);
+  console.log(accounts)
 
   const accountsNotCurrentUser = accounts.filter(
     (account) => account.role?.name !== 'owner' && account.role?.name !== 'admin'

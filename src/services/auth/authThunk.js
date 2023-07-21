@@ -101,7 +101,7 @@ export const updateAdminThunk = async (params, thunkAPI) => {
   console.log(params);
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -136,7 +136,7 @@ export const updatePasswordThunk = async (params, thunkAPI) => {
   console.log(params);
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);

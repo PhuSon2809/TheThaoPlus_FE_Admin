@@ -4,7 +4,7 @@ import { getAllSports, setMessageError, setMessageSuccess } from './sportSlice';
 export const createNewSportThunk = async (params, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -39,7 +39,7 @@ export const getAllSportsThunk = async (_, thunkAPI) => {
 export const getSportDetailThunk = async (sportId, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -58,7 +58,7 @@ export const updateSportThunk = async (params, thunkAPI) => {
   console.log(params);
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -80,7 +80,7 @@ export const updateSportThunk = async (params, thunkAPI) => {
 export const deleteSportThunk = async (sportId, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -102,7 +102,7 @@ export const activeSportThunk = async (sportId, thunkAPI) => {
   console.log(sportId);
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -124,7 +124,7 @@ export const deactiveSportThunk = async (sportId, thunkAPI) => {
   console.log(sportId);
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);

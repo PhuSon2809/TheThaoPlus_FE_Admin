@@ -4,12 +4,13 @@ import { getAccount, getAllAccounts, setMessageSuccess } from './accountSlice';
 export const getAllAccountsThunk = async (_, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
     try {
       const response = await axiosClient.getByUrl('/user/all-users');
+      console.log(response);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -20,7 +21,7 @@ export const getAllAccountsThunk = async (_, thunkAPI) => {
 export const getAccountDetailThunk = async (accountId, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -37,7 +38,7 @@ export const getAccountDetailThunk = async (accountId, thunkAPI) => {
 export const deleteAccountThunk = async (accountId, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -58,7 +59,7 @@ export const deleteAccountThunk = async (accountId, thunkAPI) => {
 export const activeAccountThunk = async (accountId, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
@@ -81,7 +82,7 @@ export const activeAccountThunk = async (accountId, thunkAPI) => {
 export const deactiveAccountThunk = async (accountId, thunkAPI) => {
   const accessToken = document.cookie
     .split('; ')
-    .find((row) => row.startsWith('accessToken'))
+    .find((row) => row.startsWith('AdminAccessToken'))
     ?.split('=')[1];
   if (accessToken) {
     axiosClient.setHeaderAuth(accessToken);
