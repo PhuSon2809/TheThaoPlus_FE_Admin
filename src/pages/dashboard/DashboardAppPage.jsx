@@ -92,7 +92,7 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={6}>
             <AppWidgetPrice
               title="Doanh Thu"
-              total={2350000}
+              total={4000000}
               color="success"
               icon={<AttachMoneyRoundedIcon fontSize="large" />}
             />
