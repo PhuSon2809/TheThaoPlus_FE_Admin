@@ -4,6 +4,7 @@ import {
   ForgotPasswordPage,
   ListAccountOwnerPage,
   ListAccountPage,
+  ListBookingPage,
   LoginPage,
   Page404,
   ProfilePage,
@@ -59,6 +60,10 @@ export const adminRoute = [
   {
     path: 'list-owner',
     component: <ListAccountOwnerPage />,
+  },
+  {
+    path: 'list-Booking',
+    component: <ListBookingPage />,
   },
   {
     path: 'profile',

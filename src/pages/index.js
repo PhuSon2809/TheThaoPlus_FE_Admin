@@ -3,6 +3,8 @@ import LoginPage from './authenticate/LoginPage';
 import RegisterPage from './authenticate/RegisterPage';
 import ResetPasswordPage from './authenticate/ResetPasswordPage';
 
+import ListBookingPage from './booking/ListBookingPage';
+
 import DashboardAppPage from './dashboard/DashboardAppPage';
 import Page404 from './dashboard/Page404';
 
@@ -14,6 +16,7 @@ import ListAccountOwnerPage from './account/ListAccountOwnerPage';
 import ListAccountPage from './account/ListAccountPage';
 
 export {
+  ListBookingPage,
   DashboardAppPage,
   ForgotPasswordPage,
   ListAccountOwnerPage,

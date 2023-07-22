@@ -3,6 +3,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import SportsSoccerRoundedIcon from '@mui/icons-material/SportsSoccerRounded';
 import WhereToVoteRoundedIcon from '@mui/icons-material/WhereToVoteRounded';
+import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import { Container, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useEffect } from 'react';
@@ -99,7 +100,7 @@ export default function DashboardAppPage() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={6}>
-            <AppWidgetSummary title="Bookings" total={totalBooking} icon={<GroupsIcon fontSize="large" />} />
+            <AppWidgetSummary title="Bookings" total={totalBooking} icon={<BookOnlineIcon fontSize="large" />} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={4}>
